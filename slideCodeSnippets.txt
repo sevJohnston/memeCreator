@@ -1,0 +1,205 @@
+Slide 5
+"webpack": "webpack src/js/memes.js --output-filename memes.js"
+
+Slide 6
+const webpack = require('webpack');
+module.exports = {
+	context: __dirname,
+	entry: {	general: './src/js/general.js',
+		memes: './src/js/memes.js',
+	},
+	output: {path: __dirname + "/dist",
+		filename: '[name].js',
+	},
+}
+"webpack": "webpack"
+
+Slide 9
+npm install @babel/core --save-dev 
+npm install @babel/preset-env --save-dev 
+npm install @babel/preset-react --save-dev 
+npm install babel-loader --save-dev
+npm install -D css-loader style-loader
+
+Slide 11
+"babel": {
+	"presets": [ "@babel/env"]
+}
+
+Slide 12
+module: {
+	rules: [
+		{ 
+		test: /\.js$/,
+		exclude: /(node_modules)/,
+		use: { loader: 'babel-loader’}
+		}, 
+		{ 
+		test: /\.css$/,  
+		use: [ 'style-loader', 'css-loader' ]
+		},
+	],
+},
+
+Slide 14
+npm install -S jquery bootstrap@3
+npm install -D less less-loader
+npm install -D file-loader url-loader
+
+Slide 15
+module: {
+	rules: [	{ 
+		test: /\.js$/,
+		exclude: /(node_modules)/,
+		use: { loader: 'babel-loader'}
+		}, { 
+		test: /\.(less|css)$/, 
+		use: [ 'style-loader', 'css-loader', 'less-loader' ]		
+		},{  
+		test: /\.(svg|eot|ttf|woff|woff2)$/,  
+		loader: 'url-loader',  options: {    limit: 10000,    name: 'fonts/[name].[ext]'  }
+		},
+	],
+},
+
+Slide 17
+plugins: [ 
+	new webpack.ProvidePlugin({ jQuery: 'jquery', $: 'jquery', jquery: 'jquery' }), 
+],
+
+Slide 19
+module: {
+	rules: [	
+		{  … 
+		}, 
+		{ 
+		test: /\.(png|jpg|gif)$/,
+		loaders: [
+			{loader: 'url-loader', options: { limit: 10000, name: 'images/[name].[ext]'}},
+			'img-loader'
+		],
+		},
+	],
+},
+
+Slide 21
+entry: {...},
+output: {...
+	output: {  ...,  publicPath: '/dist/',},
+},
+devServer: {  
+	compress: true,  port: 8080,  hot: true,
+},
+module: {..},
+plugins: [  ...,  
+	new webpack.HotModuleReplacementPlugin(),
+],
+
+devtool: 'source-map',
+
+WHEN YOU'RE DONE - webpack.config.js
+const webpack = require('webpack');
+module.exports = {
+    context: __dirname,
+    entry: {
+        general: './src/js/general.js',
+        memes: './src/js/memes.js',
+    },
+    output: {
+        path: __dirname + "/dist",
+        filename: '[name].js',
+        publicPath: '/dist/'
+    },
+    devServer: {  
+        compress: true,  port: 8080,  hot: true,
+    }, 
+    devtool: 'source-map',   
+    module: {
+        rules: [{
+            test: /\.js$/,
+            exclude: /(node_modules)/,
+            use: {
+                loader: 'babel-loader'
+            }
+        }, {
+            test: /\.(less|css)$/,
+            use: ['style-loader', 'css-loader', 'less-loader']
+        }, {
+            test: /\.(svg|eot|ttf|woff|woff2)$/,
+            loader: 'url-loader',
+            options: {
+                limit: 10000,
+                name: 'fonts/[name].[ext]'
+            }
+        }, {
+            test: /\.(png|jpg|gif)$/,
+            loaders: [{
+                    loader: 'url-loader',
+                    options: {
+                        limit: 10000,
+                        name: 'images/[name].[ext]'
+                    }
+                },
+                'img-loader'
+            ],
+        }, ],
+    },
+    plugins: [
+        new webpack.ProvidePlugin({
+            jQuery: 'jquery',
+            $: 'jquery',
+            jquery: 'jquery'
+        }),
+        new webpack.HotModuleReplacementPlugin(),
+    ],
+
+}
+
+WHEN YOU'RE DONE - package.json 
+{
+  "name": "memecreatordemo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "webpack": "webpack", 
+    "watch": "webpack-dev-server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/goodmari/LCC-CIT-Programming-CS233JS-MemeCreatorStart.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/goodmari/LCC-CIT-Programming-CS233JS-MemeCreatorStart/issues"
+  },
+  "homepage": "https://github.com/goodmari/LCC-CIT-Programming-CS233JS-MemeCreatorStart#readme",
+  "devDependencies": {
+    "@babel/core": "^7.4.3",
+    "@babel/preset-env": "^7.4.3",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^8.0.5",
+    "babel-preset-env": "^1.7.0",
+    "css-loader": "^2.1.1",
+    "file-loader": "^3.0.1",
+    "img-loader": "^3.0.1",
+    "less": "^3.9.0",
+    "less-loader": "^4.1.0",
+    "style-loader": "^0.23.1",
+    "url-loader": "^1.1.2",
+    "webpack": "^4.30.0",
+    "webpack-cli": "^3.3.0",
+    "webpack-dev-server": "^3.3.1"
+  },
+  "babel": {
+    "presets": [
+      "@babel/env"
+    ]
+  },
+  "dependencies": {
+    "bootstrap": "^3.4.1",
+    "jquery": "^3.4.0"
+  }
+}
