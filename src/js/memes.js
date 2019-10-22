@@ -1,30 +1,57 @@
-import './general';
+import './general';   //doesn't have a .js, doesn't need it
+import { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } from 'constants';
 
-class Memes {
+class Memes {   //create a class called Memes
   constructor() {
     console.log("Memes JS File");
-  }
-}
-new Memes();
-
-/*  
-Create a class called Memes
-- Part 1 - Setup the canvas and draw the default meme
-  - Initialize instance variables for all of the ui elements in the constructor
-      this.$topTextInput = 
-      this.$bottomTextInput = 
-      this.$imageInput = 
-      this.$downloadButton = 
-      this.$canvas = 
+    this.$topTextInput = document.getElementById("topText");
+      this.$bottomTextInput = document.getElementById("bottomText");
+      this.$imageInput = document.getElementById("image");
+      this.$downloadButton = document.getElementById("downloadMeme")
+      this.$canvas = document.getElementById("imgCanvas");
       // these are not in the book
       this.$defaultImage = document.querySelector('#defaultImage');
       this.image = this.$defaultImage
       this.$context = this.$canvas.getContext('2d');
       this.deviceWidth = window.innerWidth;
-  - Write the method createCanvas
-    - set the width of the canvas to the minimum of 640 and deviceWidth - 30
-    - set the height of the canvas to the min of 480 and the deviceWidth
-    - add a call to this method in the constructor
+
+      this.createCanvas();
+      this.createMeme();
+  }
+
+  createCanvas(){
+    this.$canvas.width = Math.min(640, this.deviceWidth - 30);
+    this.$canvas.height = Math.min(480, this.deviceWidth);
+  }
+
+  createMeme(){
+    this.$context.clearRect(0, 0, this.$canvas.width, this.$canvas.height);
+    this.$canvas.width = this.image.width;
+    this.$canvas.height = this.image.height;
+    this.$context.drawImage(this.image, 0, 0);
+
+    //set up the text drawing with code from lab 3 forum
+    const fontSize = ((this.$canvas.width+this.$canvas.height)/2)*4/100;
+    this.$context.font = `${fontSize}pt sans-serif`;
+    this.$context.textAlign = 'center';
+    this.$context.textBaseline = 'top';
+    this.$context.lineJoin = 'round';
+    this.$context.lineWidth  = fontSize/5;
+    this.$context.strokeStyle = 'black';
+    this.$context.fillStyle = 'white';
+
+    // get the default text from the UI
+    const topText = this.$topTextInput.value.toUpperCase();
+    const bottomText = this.$bottomTextInput.value.toUpperCase();
+    this.$context.strokeText(topText, this.$canvas.width/2, this.$canvas.height*(5/100));
+    this.$context.fillText(topText, this.$canvas.width/2, this.$canvas.height*(5/100));
+    this.$context.strokeText(bottomText, this.$canvas.width/2, this.$canvas.height*(90/100));
+    this.$context.fillText(bottomText, this.$canvas.width/2, this.$canvas.height*(90/100)); 
+  }
+}
+new Memes();    
+
+/*  
   - Write the method createMeme.  It should
     - clear the previous image from the page
     - draw the image

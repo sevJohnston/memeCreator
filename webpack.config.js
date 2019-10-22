@@ -11,7 +11,7 @@ module.exports = {
     publicPath: '/dist/'
   },
   devServer: {  
-    compress: true,  port: 8080,  hot: true,
+    compress: true,  port: 8080,  hot: true,    //hot swapping code as you type and save
   }, 
   devtool: 'source-map', 
   module: {
